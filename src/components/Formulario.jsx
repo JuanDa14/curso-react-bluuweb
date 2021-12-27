@@ -1,71 +1,101 @@
-import { useState } from "react";
+import Swal from "sweetalert2";
+import { useFormulario } from "../hooks/useFormulario";
 
-const Formulario = () => {
-  const [todo, setTodo] = useState({
+const Formulario = ({ agregarTodo }) => {
+  const initState = {
     todoName: "",
     todoDescripcion: "",
     todoEstado: "Pendiente",
-    todoCheck: false,
-  });
+    todoPrioridad: false,
+  };
+
+  const [inputs, handleChange, resetInput] = useFormulario(initState);
+
+  const { todoName, todoDescripcion, todoEstado, todoPrioridad } = inputs;
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  };
+    if (!todoName.trim()) {
+      e.target[0].focus();
+      Swal.fire({
+        title: "Error",
+        text: "Coloque un Todo",
+        icon: "error",
+      });
+      return;
+    }
+    if (!todoDescripcion.trim()) {
+      e.target[1].focus();
+      Swal.fire({
+        title: "Error",
+        text: "Coloque una Descripcion",
+        icon: "error",
+      });
+      return;
+    }
 
-  const handleChange = (e) => {
-    const { name, type, checked, value } = e.target;
-    setTodo({
-      ...todo,
-      [name]: type === "checkbox" ? checked : value,
+    agregarTodo({
+      todoName,
+      todoDescripcion,
+      todoEstado: todoEstado === "Pendiente" ? true : false,
+      todoPrioridad,
+      id: Date.now(),
     });
+
+    Swal.fire({
+      title: "Exito",
+      text: "Tarea Agregada",
+      icon: "success",
+    });
+
+    resetInput();
   };
 
   return (
-    <div>
-      <h2>controlado</h2>
+    <>
+      <h3>Agregar Todo</h3>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Ingrese Todo"
-          name="todoName"
           className="form-control mb-2"
-          value={todo.todoName}
+          name="todoName"
+          value={todoName}
           onChange={handleChange}
         />
         <textarea
           name="todoDescripcion"
+          placeholder="Ingrese Descripcion"
           className="form-control mb-2"
-          placeholder="Descripcion del todo"
-          value={todo.todoDescripcion}
+          value={todoDescripcion}
           onChange={handleChange}
         />
         <select
           name="todoEstado"
           className="form-control mb-2"
-          value={todo.todoEstado}
+          value={todoEstado}
           onChange={handleChange}
         >
           <option value="Pendiente">Pendiente</option>
-          <option value="Completada">Completada</option>
+          <option value="Completado">Completado</option>
         </select>
-
-        <div className="form-check">
-          <input
-            type="checkbox"
-            name="todoCheck"
-            className="form-check-input"
-            name="todoCheck"
-            checked={todo.todoCheck}
-            onChange={handleChange}
-          />
-          <label htmlFor="">Dar Prioridad</label>
+        <div className="form-check mb-2">
+          <label className="form-check-label">
+            <input
+              type="checkbox"
+              className="form-check-input"
+              name="todoPrioridad"
+              checked={todoPrioridad}
+              onChange={handleChange}
+            />
+            Dar prioridad
+          </label>
         </div>
-
         <button type="submit" className="btn btn-primary">
-          Guardar
+          Agregar
         </button>
       </form>
-    </div>
+    </>
   );
 };
 
