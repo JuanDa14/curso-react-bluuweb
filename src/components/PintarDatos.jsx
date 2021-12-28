@@ -1,6 +1,7 @@
 import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 import Personaje from "./Personaje";
+import Loading from "./Loading";
 
 const PintarDatos = ({ personaje = "" }) => {
   const [personajes, setPersonajes] = useState([]);
@@ -38,9 +39,7 @@ const PintarDatos = ({ personaje = "" }) => {
       <button className="btn btn-danger mt-2" onClick={() => consumirApi("")}>
         Ver todos
       </button>
-      <div className="d-flex justify-content-center">
-        <div className={loading ? "spinner-border" : ""} role="status"></div>
-      </div>
+      <Loading loading={loading} />
       <div className="row mt-2 g-3">
         {personajes.map((res) => (
           <Personaje personaje={res} key={res.id} />
