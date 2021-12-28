@@ -39,7 +39,7 @@ const PintarDatos = ({ personaje = "" }) => {
       <button className="btn btn-danger mt-2" onClick={() => consumirApi("")}>
         Ver todos
       </button>
-      <Loading loading={loading} />
+      {loading ? <Loading /> : ""}
       <div className="row mt-2 g-3">
         {personajes.map((res) => (
           <Personaje personaje={res} key={res.id} />
