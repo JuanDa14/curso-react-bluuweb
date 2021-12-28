@@ -1,5 +1,6 @@
 import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
+import Personaje from "./Personaje";
 
 const PintarDatos = ({ personaje = "" }) => {
   const [personajes, setPersonajes] = useState([]);
@@ -42,15 +43,7 @@ const PintarDatos = ({ personaje = "" }) => {
       </div>
       <div className="row mt-2 g-3">
         {personajes.map((res) => (
-          <div className="col-12 col-md-4" key={res.id}>
-            <div className="card">
-              <img className="card-img-top" src={res.image} alt={res.name} />
-              <div className="card-body">
-                <h4 className="card-title">{res.name}</h4>
-                <p className="card-text">{res.species}</p>
-              </div>
-            </div>
-          </div>
+          <Personaje personaje={res} key={res.id} />
         ))}
       </div>
     </>
